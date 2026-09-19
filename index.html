@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A silly offline AI rock paper scissors game.">
+  <title>Rock Paper Algorithm</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <p class="eyebrow">OFFLINE MACHINE LEARNING-ish</p>
+      <h1>Rock Paper Algorithm</h1>
+      <p class="lede">A tiny pretend AI that studies your last three moves and still makes questionable decisions.</p>
+    </header>
+
+    <section class="arena" aria-live="polite">
+      <div class="scoreboard">
+        <div><span class="label">YOU</span><strong id="player-score">0</strong></div>
+        <div class="round"><span id="round-label">ROUND 1</span><span id="status">Choose a move.</span></div>
+        <div><span class="label">AI</span><strong id="ai-score">0</strong></div>
+      </div>
+      <div class="versus">
+        <div class="choice-card"><span class="choice-label">YOUR MOVE</span><span id="player-choice" class="choice">?</span></div>
+        <div class="versus-mark">VS</div>
+        <div class="choice-card"><span class="choice-label">AI MOVE</span><span id="ai-choice" class="choice">?</span></div>
+      </div>
+      <p id="analysis" class="analysis">The algorithm is waiting for a data point.</p>
+    </section>
+
+    <section class="controls" aria-label="Choose your move">
+      <button class="move" data-move="rock"><span class="glyph">ROCK</span><small>solid logic</small></button>
+      <button class="move" data-move="paper"><span class="glyph">PAPER</span><small>bureaucratic shield</small></button>
+      <button class="move" data-move="scissors"><span class="glyph">SCISSORS</span><small>sharp optimism</small></button>
+    </section>
+
+    <footer>
+      <button id="reset" class="reset">Reset the machine</button>
+      <span id="streak">Streak: 0</span>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
