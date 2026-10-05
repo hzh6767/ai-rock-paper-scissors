@@ -15,10 +15,10 @@
       <p class="lede">A tiny pretend AI that studies your last three moves and still makes questionable decisions.</p>
     </header>
 
-    <section class="arena" aria-live="polite">
+    <section class="arena">
       <div class="scoreboard">
         <div><span class="label">YOU</span><strong id="player-score">0</strong></div>
-        <div class="round"><span id="round-label">ROUND 1</span><span id="status">Choose a move.</span></div>
+        <div class="round"><span id="round-label">ROUND 1</span><span id="status" role="status" aria-live="polite">Choose a move.</span></div>
         <div><span class="label">AI</span><strong id="ai-score">0</strong></div>
       </div>
       <div class="versus">
@@ -30,9 +30,9 @@
     </section>
 
     <section class="controls" aria-label="Choose your move">
-      <button class="move" data-move="rock"><span class="glyph">ROCK</span><small>solid logic</small></button>
-      <button class="move" data-move="paper"><span class="glyph">PAPER</span><small>bureaucratic shield</small></button>
-      <button class="move" data-move="scissors"><span class="glyph">SCISSORS</span><small>sharp optimism</small></button>
+      <button class="move" data-move="rock"><span class="glyph">ROCK</span><small aria-hidden="true">solid logic</small></button>
+      <button class="move" data-move="paper"><span class="glyph">PAPER</span><small aria-hidden="true">bureaucratic shield</small></button>
+      <button class="move" data-move="scissors"><span class="glyph">SCISSORS</span><small aria-hidden="true">sharp optimism</small></button>
     </section>
 
     <footer>
@@ -40,6 +40,7 @@
       <span id="streak">Streak: 0</span>
     </footer>
   </main>
+  <script src="game.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

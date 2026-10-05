@@ -1,0 +1,11 @@
+{
+  "name": "ai-rock-paper-scissors",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zero-dependency offline rock-paper-scissors demo with a deliberately unserious adaptive opponent.",
+  "license": "MIT",
+  "scripts": {
+    "check": "node --check game.js && node --check app.js",
+    "test": "node --test tests/app.test.mjs"
+  }
+}
