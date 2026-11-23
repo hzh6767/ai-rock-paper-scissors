@@ -130,11 +130,13 @@ test("app.js wires every element the page defines", () => {
   const moves = [...html.matchAll(/data-move="([^"]+)"/g)].map((m) => m[1]);
   const handlers = new Map();
   const nodes = new Map();
+  let focused;
   const makeNode = (id) => {
     const node = {
       id,
       textContent: "",
       className: "",
+      focus: () => { focused = id; },
       dataset: { move: moves.includes(id) ? id : undefined },
       addEventListener: (type, fn) => handlers.set(`${id}:${type}`, fn)
     };
@@ -160,6 +162,7 @@ test("app.js wires every element the page defines", () => {
   assert.ok(handlers.has("reset:click"), "reset has a click handler");
   assert.ok(handlers.has("status:click") === false, "status is output only");
   handlers.get("reset:click")();
+  assert.equal(focused, "rock", "keyboard players can choose a move immediately after reset");
 
   const status = nodes.get("status");
   assert.equal(status.textContent, "Choose a move.", "reset restores the prompt");

@@ -39,3 +39,8 @@ footer { display: flex; justify-content: space-between; align-items: center; col
 .win { color: var(--good); }
 .lose { color: var(--bad); }
 @media (max-width: 560px) { .shell { padding-top: 28px; } .arena { padding: 15px; } .choice-card { min-height: 116px; padding: 10px; } .controls { grid-template-columns: 1fr; } .move { min-height: 70px; } }
+@media (max-width: 420px) {
+  .versus { gap: 6px; }
+  .choice-card { padding-inline: 3px; }
+  .choice { font-size: clamp(1rem, 4.6vw, 1.3rem); letter-spacing: .04em; }
+}
