@@ -67,7 +67,9 @@
 
   function describeRound(aiMove, random) {
     var rng = random || Math.random;
-    return pick(taunts, rng) + " It predicted " + labels[aiMove].toLowerCase() + ".";
+    var taunt = pick(taunts, rng);
+    if (!aiMove) return taunt + " The opening move was random.";
+    return taunt + " It predicted " + beats[aiMove] + ".";
   }
 
   var api = {

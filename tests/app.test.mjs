@@ -114,10 +114,12 @@ test("nextState does not mutate the state it is given", () => {
   assert.equal(JSON.stringify(state), snapshot);
 });
 
-test("describeRound names the AI move it predicted", () => {
-  const text = RPS.describeRound("scissors", () => 0);
-  assert.ok(RPS.taunts.includes(text.replace(" It predicted scissors.", "")), "reuses a taunt verbatim");
-  assert.ok(text.endsWith("It predicted scissors."), "states the AI move");
+test("describeRound distinguishes an opening move from countering a prediction", () => {
+  assert.match(RPS.describeRound(null, () => 0), /opening move was random/);
+  for (const move of MOVES) {
+    const aiMove = RPS.chooseAiMove([move]);
+    assert.equal(RPS.describeRound(aiMove, () => 0), RPS.taunts[0] + " It predicted " + move + ".");
+  }
 });
 
 // The page loads game.js then app.js as classic scripts. Run the same wiring
@@ -169,10 +171,13 @@ test("app.js wires every element the page defines", () => {
   assert.equal(nodes.get("ai-choice").textContent, "?");
 
   handlers.get("rock:click")();
+  assert.match(nodes.get("analysis").textContent, /opening move was random/);
   assert.match(String(nodes.get("round-label").textContent), /^ROUND 2$/, "round advances after a move");
   assert.ok(MOVES.map((m) => RPS.labels[m]).includes(nodes.get("player-choice").textContent));
   assert.ok(MOVES.map((m) => RPS.labels[m]).includes(nodes.get("ai-choice").textContent));
   assert.ok(["win", "lose", ""].includes(status.className));
+  handlers.get("scissors:click")();
+  assert.match(nodes.get("analysis").textContent, /It predicted rock\./);
 });
 
 test("index.html scopes the live region to the status node only", () => {
