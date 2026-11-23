@@ -114,10 +114,12 @@ test("nextState does not mutate the state it is given", () => {
   assert.equal(JSON.stringify(state), snapshot);
 });
 
-test("describeRound names the AI move it predicted", () => {
-  const text = RPS.describeRound("scissors", () => 0);
-  assert.ok(RPS.taunts.includes(text.replace(" It predicted scissors.", "")), "reuses a taunt verbatim");
-  assert.ok(text.endsWith("It predicted scissors."), "states the AI move");
+test("describeRound distinguishes an opening move from countering a prediction", () => {
+  assert.match(RPS.describeRound(null, () => 0), /opening move was random/);
+  for (const move of MOVES) {
+    const aiMove = RPS.chooseAiMove([move]);
+    assert.equal(RPS.describeRound(aiMove, () => 0), RPS.taunts[0] + " It predicted " + move + ".");
+  }
 });
 
 // The page loads game.js then app.js as classic scripts. Run the same wiring
@@ -128,11 +130,13 @@ test("app.js wires every element the page defines", () => {
   const moves = [...html.matchAll(/data-move="([^"]+)"/g)].map((m) => m[1]);
   const handlers = new Map();
   const nodes = new Map();
+  let focused;
   const makeNode = (id) => {
     const node = {
       id,
       textContent: "",
       className: "",
+      focus: () => { focused = id; },
       dataset: { move: moves.includes(id) ? id : undefined },
       addEventListener: (type, fn) => handlers.set(`${id}:${type}`, fn)
     };
@@ -158,6 +162,7 @@ test("app.js wires every element the page defines", () => {
   assert.ok(handlers.has("reset:click"), "reset has a click handler");
   assert.ok(handlers.has("status:click") === false, "status is output only");
   handlers.get("reset:click")();
+  assert.equal(focused, "rock", "keyboard players can choose a move immediately after reset");
 
   const status = nodes.get("status");
   assert.equal(status.textContent, "Choose a move.", "reset restores the prompt");
@@ -169,10 +174,13 @@ test("app.js wires every element the page defines", () => {
   assert.equal(nodes.get("ai-choice").textContent, "?");
 
   handlers.get("rock:click")();
+  assert.match(nodes.get("analysis").textContent, /opening move was random/);
   assert.match(String(nodes.get("round-label").textContent), /^ROUND 2$/, "round advances after a move");
   assert.ok(MOVES.map((m) => RPS.labels[m]).includes(nodes.get("player-choice").textContent));
   assert.ok(MOVES.map((m) => RPS.labels[m]).includes(nodes.get("ai-choice").textContent));
   assert.ok(["win", "lose", ""].includes(status.className));
+  handlers.get("scissors:click")();
+  assert.match(nodes.get("analysis").textContent, /It predicted rock\./);
 });
 
 test("index.html scopes the live region to the status node only", () => {

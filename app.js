@@ -15,6 +15,7 @@
 
   function play(playerMove) {
     const aiMove = chooseAiMove(state.history);
+    const analysis = describeRound(state.history.length ? aiMove : null);
     const turn = nextState(state, playerMove, aiMove);
     Object.assign(state, turn.state);
 
@@ -30,10 +31,11 @@
         : `Draw. You both played ${labels[aiMove]}.`,
       turn.result === "win" ? "win" : turn.result === "lose" ? "lose" : ""
     );
-    $("analysis").textContent = describeRound(aiMove);
+    $("analysis").textContent = analysis;
   }
 
-  document.querySelectorAll("[data-move]").forEach((button) => button.addEventListener("click", () => play(button.dataset.move)));
+  const moveButtons = document.querySelectorAll("[data-move]");
+  moveButtons.forEach((button) => button.addEventListener("click", () => play(button.dataset.move)));
   $("reset").addEventListener("click", () => {
     Object.assign(state, initialState());
     ["player-choice", "ai-choice"].forEach((id) => { $(id).textContent = "?"; });
@@ -43,5 +45,6 @@
     $("streak").textContent = "Streak: 0";
     announce("Choose a move.");
     $("analysis").textContent = "The algorithm is waiting for a data point.";
+    moveButtons[0].focus();
   });
 })();
